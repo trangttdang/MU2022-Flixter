@@ -25,20 +25,29 @@
     self.detailLable.text = self.moviesDetail[@"overview"];
     self.titleLable.text = [NSString stringWithFormat:@"%@", self.moviesDetail[@"title"]];
     
-    self.ratingLable.text = [NSString stringWithFormat:@"%@", self.moviesDetail[@"vote_average"]];
+//    self.ratingLable.text = [NSString stringWithFormat:@"%@", self.moviesDetail[@"vote_average"]];
+    NSString *rating = [NSString stringWithFormat:@"%@", self.moviesDetail[@"vote_average"]];
+    self.ratingLable.text = [rating stringByAppendingString:@"/10"];
     
     NSString *image = self.moviesDetail[@"poster_path"];
-    NSString *directory = @"https://image.tmdb.org/t/p/w92/";
+    NSString *directory = @"https://image.tmdb.org/t/p/w200/";
+    NSString *directory_large = @"https://image.tmdb.org/t/p/w500/";
     NSString *path = [directory stringByAppendingString:image];
+    NSString *path_large = [directory_large stringByAppendingString:image];
     
     NSURL *url = [NSURL URLWithString:path];
+    NSURL *url_large = [NSURL URLWithString:path_large];
     
+    NSURLRequest *requestSmall = [NSURLRequest requestWithURL:url];
+    NSURLRequest *requestLarge = [NSURLRequest requestWithURL:url_large];
     
     NSString *backdrop_image = self.moviesDetail[@"backdrop_path"];
     NSString *backdrop_path = [directory stringByAppendingString:backdrop_image];
     NSURL *backdrop_url = [NSURL URLWithString:backdrop_path];
+    
     [self.mainPoster setImageWithURL:backdrop_url];
     [self.subPoster setImageWithURL:url];
+
 }
 
 /*

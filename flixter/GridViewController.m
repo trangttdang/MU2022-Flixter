@@ -73,11 +73,15 @@
                           
     NSDictionary *movie = self.movies[indexPath.row];
     NSString *image = movie[@"poster_path"];
-    NSString *directory = @"https://image.tmdb.org/t/p/w92/";
+    NSString *directory = @"https://image.tmdb.org/t/p/w200/";
     NSString *path = [directory stringByAppendingString:image];
 //    NSLog(@"%@", path);
     NSURL *url = [NSURL URLWithString:path];
+    
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
     [cell.posterView setImageWithURL:url];
+    
     
     return cell;
 }

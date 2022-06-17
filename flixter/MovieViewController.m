@@ -10,23 +10,45 @@
 #import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 
-@interface MovieViewController() <UITableViewDataSource, UITableViewDelegate>
-@property (nonatomic, strong) NSArray *movies;
+@interface MovieViewController() <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
+@property (strong, nonatomic) NSArray *movies;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
-
+@property (weak, nonatomic) IBOutlet UISearchBar *searchMovie;
+@property (strong, nonatomic) NSArray *filteredMovie;
 
 @end
 
 @implementation MovieViewController
+
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    self.searchMovie.showsCancelButton = YES;
+}
+
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    self.searchMovie.showsCancelButton = NO;
+    self.searchMovie.text = @"";
+    [self.searchMovie resignFirstResponder];
+    self.filteredMovie = self.movies;
+    [self.tableView reloadData];
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.searchMovie becomeFirstResponder];
     // Do any additional setup after loading the view.
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
+    
     // Start the activity indicator
     [self.indicator startAnimating];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
+    self.searchMovie.delegate = self;
+    
+
+
     [self fetchMovies];
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchMovies) forControlEvents:(UIControlEventValueChanged)];
@@ -35,6 +57,7 @@
 }
 
 - (void)fetchMovies {
+    self.filteredMovie = self.movies;
     NSURL *url = [NSURL URLWithString:@"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
@@ -48,6 +71,7 @@
                NSLog(@"%@", dataDictionary);
                // TODO: Get the array of movies
                self.movies = dataDictionary[@"results"];
+               self.filteredMovie = dataDictionary[@"results"];
                for (id movie in self.movies) {
                    NSLog(@"%@", movie[@"title"]);
                }
@@ -57,13 +81,14 @@
                [self.tableView reloadData];
            }
         [self.refreshControl endRefreshing];
+        [self.indicator stopAnimating];
         
 
         
        }];
     // Stop the activity indicator
     // Hides automatically if "Hides When Stopped" is enabled
-    [self.indicator stopAnimating];
+    
     [task resume];
 }
 /*
@@ -81,26 +106,49 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     myCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell" forIndexPath:indexPath];
                           
-    NSDictionary *movie = self.movies[indexPath.row];
+    NSDictionary *movie = self.filteredMovie[indexPath.row];
     cell.titleLabel.text = movie[@"title"];
     cell.synopsisLabel.text = movie[@"overview"];
     
     
     NSString *image = movie[@"poster_path"];
-    NSString *directory = @"https://image.tmdb.org/t/p/w92/";
+    NSString *directory = @"https://image.tmdb.org/t/p/w200/";
     NSString *path = [directory stringByAppendingString:image];
     
     NSURL *url = [NSURL URLWithString:path];
     
-    [cell.posterImage setImageWithURL:url];
-    
-    
+//    [cell.posterImage setImageWithURL:url];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    __weak myCustomCell *weakSelf = cell;
+    [weakSelf.posterImage setImageWithURLRequest:request placeholderImage:nil
+                                    success:^(NSURLRequest *imageRequest, NSHTTPURLResponse *imageResponse, UIImage *image) {
+                                        
+                                        // imageResponse will be nil if the image is cached
+                                        if (imageResponse) {
+                                            NSLog(@"Image was NOT cached, fade in image");
+                                            weakSelf.posterImage.alpha = 0.0;
+                                            weakSelf.posterImage.image = image;
+                                            
+                                            //Animate UIImageView back to alpha 1 over 0.3sec
+                                            [UIView animateWithDuration:1 animations:^{
+                                                weakSelf.posterImage.alpha = 1.0;
+                                            }];
+                                        }
+                                        else {
+                                            NSLog(@"Image was cached so just update the image");
+                                            weakSelf.posterImage.image = image;
+                                        }
+                                    }
+                                    failure:^(NSURLRequest *request, NSHTTPURLResponse * response, NSError *error) {
+                                        // do something for the failure condition
+                                    }];
+
     
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.movies.count;
+    return self.filteredMovie.count;
 }
 
 - (void)didReceiveMemoryWarning{
@@ -128,6 +176,22 @@
        [alertController addAction:okAction];
         [self presentViewController:alertController animated: YES completion: nil];
 }
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+    if(searchText.length!= 0){
+        NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *evaluatedObject, NSDictionary *bindings) {
+            NSString *movieTitle = evaluatedObject[@"title"];
+            return [movieTitle containsString:searchText];
+        }];
+        self.filteredMovie = [self.movies filteredArrayUsingPredicate:predicate];
+        NSLog(@"%@",self.filteredMovie);
+    }
+    else{
+        self.filteredMovie = self.movies;
+    }
+    [self.tableView reloadData];
+}
+
 
 
 
