@@ -1,5 +1,5 @@
 //
-//  DetailsViewController.h
+//  MovieViewGridCell.h
 //  flixter
 //
 //  Created by Trang Dang on 6/16/22.
@@ -9,8 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DetailsViewController : UIViewController
-@property (nonatomic, strong) NSDictionary *moviesDetail;
+@interface MovieViewGridCell : UICollectionViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *posterView;
 
 @end
 

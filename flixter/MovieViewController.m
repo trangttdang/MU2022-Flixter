@@ -8,11 +8,13 @@
 #import "MovieViewController.h"
 #import "myCustomCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "DetailsViewController.h"
 
 @interface MovieViewController() <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) NSArray *movies;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
 
 
 @end
@@ -23,6 +25,8 @@
     // Do any additional setup after loading the view.
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    // Start the activity indicator
+    [self.indicator startAnimating];
     [self fetchMovies];
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchMovies) forControlEvents:(UIControlEventValueChanged)];
@@ -37,6 +41,7 @@
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
            if (error != nil) {
                NSLog(@"%@", [error localizedDescription]);
+               [self displayAlertMessage];
            }
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
@@ -52,7 +57,13 @@
                [self.tableView reloadData];
            }
         [self.refreshControl endRefreshing];
+        
+
+        
        }];
+    // Stop the activity indicator
+    // Hides automatically if "Hides When Stopped" is enabled
+    [self.indicator stopAnimating];
     [task resume];
 }
 /*
@@ -70,9 +81,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     myCustomCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell" forIndexPath:indexPath];
                           
-    NSDictionary * movie = self.movies[indexPath.row];
+    NSDictionary *movie = self.movies[indexPath.row];
     cell.titleLabel.text = movie[@"title"];
     cell.synopsisLabel.text = movie[@"overview"];
+    
+    
     NSString *image = movie[@"poster_path"];
     NSString *directory = @"https://image.tmdb.org/t/p/w92/";
     NSString *path = [directory stringByAppendingString:image];
@@ -94,7 +107,27 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//Get the new view controller using [segue destinationViewController].
+//Pass the selected object to the new view controller.
+    NSDictionary *dataToPass = self.movies[self.tableView.indexPathForSelectedRow.row];
+    DetailsViewController *detailVC = [segue destinationViewController];
+    detailVC.moviesDetail = dataToPass;
 
+}
+
+- (void) displayAlertMessage{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Poor Connection" message:@"Check your internet connection and try again" preferredStyle:UIAlertControllerStyleAlert];
+
+       UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+           NSLog(@"OK");
+           [self.indicator startAnimating];
+           [self fetchMovies];
+       }];
+       
+       [alertController addAction:okAction];
+        [self presentViewController:alertController animated: YES completion: nil];
+}
 
 
 
