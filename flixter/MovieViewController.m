@@ -54,6 +54,7 @@
     [self.refreshControl addTarget:self action:@selector(fetchMovies) forControlEvents:(UIControlEventValueChanged)];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
     
+    
 }
 
 - (void)fetchMovies {
@@ -143,6 +144,9 @@
                                         // do something for the failure condition
                                     }];
 
+    UIView *backgroundView = [[UIView alloc] init];
+    backgroundView.backgroundColor = UIColor.redColor;
+    cell.selectedBackgroundView = backgroundView;
     
     return cell;
 }

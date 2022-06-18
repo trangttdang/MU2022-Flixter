@@ -38,14 +38,53 @@
     NSURL *url = [NSURL URLWithString:path];
     NSURL *url_large = [NSURL URLWithString:path_large];
     
-    NSURLRequest *requestSmall = [NSURLRequest requestWithURL:url];
-    NSURLRequest *requestLarge = [NSURLRequest requestWithURL:url_large];
     
     NSString *backdrop_image = self.moviesDetail[@"backdrop_path"];
-    NSString *backdrop_path = [directory stringByAppendingString:backdrop_image];
-    NSURL *backdrop_url = [NSURL URLWithString:backdrop_path];
+    NSString *backdrop_pathSmall = [directory stringByAppendingString:backdrop_image];
+    NSURL *backdrop_url = [NSURL URLWithString:backdrop_pathSmall];
+    NSString *backdrop_pathLarge = [directory_large stringByAppendingString:backdrop_image];
+    NSURL *backdrop_urlLarge = [NSURL URLWithString:backdrop_pathLarge];
     
-    [self.mainPoster setImageWithURL:backdrop_url];
+    NSURLRequest *requestSmall = [NSURLRequest requestWithURL:backdrop_url];
+    NSURLRequest *requestLarge = [NSURLRequest requestWithURL:backdrop_urlLarge];
+    
+    
+    __weak DetailsViewController *weakSelf = self;
+
+    [self.mainPoster setImageWithURLRequest:requestSmall
+                          placeholderImage:nil
+                                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *smallImage) {
+                                       
+                                       // smallImageResponse will be nil if the smallImage is already available
+                                       // in cache (might want to do something smarter in that case).
+                                       weakSelf.mainPoster.alpha = 0.0;
+                                       weakSelf.mainPoster.image = smallImage;
+                                       
+                                       [UIView animateWithDuration:1.0
+                                                        animations:^{
+                                                            
+                                                            weakSelf.mainPoster.alpha = 1.0;
+                                                            
+                                                        } completion:^(BOOL finished) {
+                                                            // The AFNetworking ImageView Category only allows one request to be sent at a time
+                                                            // per ImageView. This code must be in the completion block.
+                                                            [weakSelf.mainPoster setImageWithURLRequest:requestLarge
+                                                                                  placeholderImage:smallImage
+                                                                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage * largeImage) {
+                                                                                                weakSelf.mainPoster.image = largeImage;
+                                                                                  }
+                                                                                           failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                                                                               // do something for the failure condition of the large image request
+                                                                                               // possibly setting the ImageView's image to a default image
+                                                                                           }];
+                                                        }];
+                                   }
+                                   failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                       // do something for the failure condition
+                                       // possibly try to get the large image
+                                   }];
+    
+//    [self.mainPoster setImageWithURL:backdrop_url];
     [self.subPoster setImageWithURL:url];
 
 }
