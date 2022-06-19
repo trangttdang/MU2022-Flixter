@@ -8,5 +8,4 @@
 #import "MovieViewGridCell.h"
 
 @implementation MovieViewGridCell
-
 @end

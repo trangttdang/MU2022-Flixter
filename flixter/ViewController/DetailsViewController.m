@@ -36,7 +36,6 @@
     NSString *path_large = [directory_large stringByAppendingString:image];
     
     NSURL *url = [NSURL URLWithString:path];
-    NSURL *url_large = [NSURL URLWithString:path_large];
     
     
     NSString *backdrop_image = self.moviesDetail[@"backdrop_path"];
@@ -88,6 +87,34 @@
     [self.subPoster setImageWithURL:url];
 
 }
+//https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key=<<api_key>>&language=en-US
+- (void)fetchTrailer {
+    NSString *movieID = self.moviesDetail[@"id"];
+    NSString *link = @"https://api.themoviedb.org/3/movie/";
+    NSString *api = @"/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
+    
+    NSString *queryLink = [link stringByAppendingString:[movieID stringByAppendingString:api]];
+    
+    
+    NSURL *url = [NSURL URLWithString:queryLink];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+           if (error != nil) {
+               NSLog(@"%@", [error localizedDescription]);
+            
+           }
+           else {
+               NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+               NSLog(@"%@", dataDictionary);
+              
+           }
+    
+        
+       }];
+    
+    [task resume];
+}
 
 /*
 #pragma mark - Navigation
@@ -98,6 +125,7 @@
     // Pass the selected object to the new view controller.
 }
 */
+
 
 
 @end

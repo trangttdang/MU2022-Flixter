@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *MoviesCollectionView;
 @property (nonatomic, strong) NSArray *movies;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
-
 @end
 
 @implementation GridViewController
@@ -27,14 +26,6 @@
     [self fetchMovies];
 }
 
-- (void)viewDidLayoutSubviews {
-   [super viewDidLayoutSubviews];
-
-    self.flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    self.flowLayout.minimumLineSpacing = 0;
-    self.flowLayout.minimumInteritemSpacing = 0;
-    self.flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 10);
-}
 
 - (void)fetchMovies {
     NSURL *url = [NSURL URLWithString:@"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"];
@@ -55,13 +46,15 @@
 }
 
 
-//pragma mark - Navigation
+/*
+#pragma mark - Navigation
 
-//In a storyboard-based application, you will often want to do a little preparation before navigation
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-////Get the new view controller using [segue destinationViewController].
-////Pass the selected object to the new view controller.
-//}
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -79,9 +72,7 @@
     NSURL *url = [NSURL URLWithString:path];
     
 //    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
     [cell.posterView setImageWithURL:url];
-    
     
     return cell;
 }
@@ -90,7 +81,8 @@
     int totalwidth = self.MoviesCollectionView.bounds.size.width;
     int numberOfCellsPerRow = 4;
     int dimensions = (CGFloat)(totalwidth / numberOfCellsPerRow);
-    return CGSizeMake(dimensions, dimensions*1.2);
+    return CGSizeMake(dimensions*1.25, dimensions*1.8);
+
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -99,7 +91,6 @@
     NSDictionary *dataToPass = self.movies[self.MoviesCollectionView.indexPathsForSelectedItems[0].row];
     DetailsViewController *detailVC = [segue destinationViewController];
     detailVC.moviesDetail = dataToPass;
-
 }
 
 
