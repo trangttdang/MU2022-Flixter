@@ -5,7 +5,7 @@
 //  Created by Trang Dang on 6/15/22.
 //
 
-#import "ViewController.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

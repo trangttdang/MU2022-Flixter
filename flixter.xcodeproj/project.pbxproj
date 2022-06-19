@@ -20,6 +20,7 @@
 		94538F4E285A76E900CB2F62 /* MovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94538F4D285A76E900CB2F62 /* MovieViewController.m */; };
 		94538F55285AAA7800CB2F62 /* myCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 94538F54285AAA7800CB2F62 /* myCustomCell.m */; };
 		94538FA2285BFE9400CB2F62 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94538FA1285BFE9400CB2F62 /* DetailsViewController.m */; };
+		94769175285FEB8200ED0947 /* TrailerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94769174285FEB8200ED0947 /* TrailerViewController.m */; };
 		94D43FE8285C58AA007C8827 /* GridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D43FE7285C58AA007C8827 /* GridViewController.m */; };
 		94D43FEE285C5966007C8827 /* MovieViewGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D43FED285C5966007C8827 /* MovieViewGridCell.m */; };
 		C776031F953C106772F00B1D /* Pods_flixter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31A933B1DCEE3B98ED5DA1C2 /* Pods_flixter.framework */; };
@@ -72,6 +73,8 @@
 		94538F54285AAA7800CB2F62 /* myCustomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = myCustomCell.m; sourceTree = "<group>"; };
 		94538FA0285BFE9400CB2F62 /* DetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
 		94538FA1285BFE9400CB2F62 /* DetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
+		94769173285FEB8200ED0947 /* TrailerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrailerViewController.h; path = flixter/ViewController/TrailerViewController.h; sourceTree = SOURCE_ROOT; };
+		94769174285FEB8200ED0947 /* TrailerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TrailerViewController.m; path = flixter/ViewController/TrailerViewController.m; sourceTree = SOURCE_ROOT; };
 		94D43FE6285C58AA007C8827 /* GridViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GridViewController.h; sourceTree = "<group>"; };
 		94D43FE7285C58AA007C8827 /* GridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GridViewController.m; sourceTree = "<group>"; };
 		94D43FEC285C5966007C8827 /* MovieViewGridCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MovieViewGridCell.h; sourceTree = "<group>"; };
@@ -156,25 +159,13 @@
 		94538F16285A554600CB2F62 /* flixter */ = {
 			isa = PBXGroup;
 			children = (
-				94538F17285A554600CB2F62 /* AppDelegate.h */,
-				94538F18285A554600CB2F62 /* AppDelegate.m */,
-				94538F1A285A554600CB2F62 /* SceneDelegate.h */,
-				94538F20285A554600CB2F62 /* Main.storyboard */,
-				94D43FE6285C58AA007C8827 /* GridViewController.h */,
-				94D43FE7285C58AA007C8827 /* GridViewController.m */,
-				94D43FEC285C5966007C8827 /* MovieViewGridCell.h */,
-				94D43FED285C5966007C8827 /* MovieViewGridCell.m */,
-				94538FA0285BFE9400CB2F62 /* DetailsViewController.h */,
-				94538FA1285BFE9400CB2F62 /* DetailsViewController.m */,
-				94538F1B285A554600CB2F62 /* SceneDelegate.m */,
-				94538F53285AAA7800CB2F62 /* myCustomCell.h */,
-				94538F54285AAA7800CB2F62 /* myCustomCell.m */,
+				94769172285FB74E00ED0947 /* Delegate */,
+				94769171285FB6FE00ED0947 /* StoryBoard */,
+				94769170285FB55800ED0947 /* CustomCell */,
+				9476916F285FB52700ED0947 /* ViewController */,
 				94538F23285A554600CB2F62 /* Assets.xcassets */,
-				94538F25285A554600CB2F62 /* LaunchScreen.storyboard */,
 				94538F28285A554600CB2F62 /* Info.plist */,
 				94538F29285A554600CB2F62 /* main.m */,
-				94538F4C285A76E900CB2F62 /* MovieViewController.h */,
-				94538F4D285A76E900CB2F62 /* MovieViewController.m */,
 			);
 			path = flixter;
 			sourceTree = "<group>";
@@ -194,6 +185,52 @@
 				94538F3F285A554700CB2F62 /* flixterUITestsLaunchTests.m */,
 			);
 			path = flixterUITests;
+			sourceTree = "<group>";
+		};
+		9476916F285FB52700ED0947 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				94769173285FEB8200ED0947 /* TrailerViewController.h */,
+				94769174285FEB8200ED0947 /* TrailerViewController.m */,
+				94D43FE6285C58AA007C8827 /* GridViewController.h */,
+				94D43FE7285C58AA007C8827 /* GridViewController.m */,
+				94538FA0285BFE9400CB2F62 /* DetailsViewController.h */,
+				94538FA1285BFE9400CB2F62 /* DetailsViewController.m */,
+				94538F4C285A76E900CB2F62 /* MovieViewController.h */,
+				94538F4D285A76E900CB2F62 /* MovieViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		94769170285FB55800ED0947 /* CustomCell */ = {
+			isa = PBXGroup;
+			children = (
+				94D43FEC285C5966007C8827 /* MovieViewGridCell.h */,
+				94D43FED285C5966007C8827 /* MovieViewGridCell.m */,
+				94538F53285AAA7800CB2F62 /* myCustomCell.h */,
+				94538F54285AAA7800CB2F62 /* myCustomCell.m */,
+			);
+			path = CustomCell;
+			sourceTree = "<group>";
+		};
+		94769171285FB6FE00ED0947 /* StoryBoard */ = {
+			isa = PBXGroup;
+			children = (
+				94538F20285A554600CB2F62 /* Main.storyboard */,
+				94538F25285A554600CB2F62 /* LaunchScreen.storyboard */,
+			);
+			path = StoryBoard;
+			sourceTree = "<group>";
+		};
+		94769172285FB74E00ED0947 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				94538F17285A554600CB2F62 /* AppDelegate.h */,
+				94538F18285A554600CB2F62 /* AppDelegate.m */,
+				94538F1A285A554600CB2F62 /* SceneDelegate.h */,
+				94538F1B285A554600CB2F62 /* SceneDelegate.m */,
+			);
+			path = Delegate;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -441,6 +478,7 @@
 				94538FA2285BFE9400CB2F62 /* DetailsViewController.m in Sources */,
 				94538F55285AAA7800CB2F62 /* myCustomCell.m in Sources */,
 				94538F1C285A554600CB2F62 /* SceneDelegate.m in Sources */,
+				94769175285FEB8200ED0947 /* TrailerViewController.m in Sources */,
 				94D43FEE285C5966007C8827 /* MovieViewGridCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

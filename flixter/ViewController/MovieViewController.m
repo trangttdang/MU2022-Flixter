@@ -33,6 +33,7 @@
     self.filteredMovie = self.movies;
     [self.tableView reloadData];
     
+    
 }
 
 - (void)viewDidLoad {
@@ -53,7 +54,6 @@
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchMovies) forControlEvents:(UIControlEventValueChanged)];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
-    
     
 }
 
@@ -143,9 +143,9 @@
                                     failure:^(NSURLRequest *request, NSHTTPURLResponse * response, NSError *error) {
                                         // do something for the failure condition
                                     }];
-
+    
     UIView *backgroundView = [[UIView alloc] init];
-    backgroundView.backgroundColor = UIColor.redColor;
+    backgroundView.backgroundColor = UIColor.tintColor;
     cell.selectedBackgroundView = backgroundView;
     
     return cell;
