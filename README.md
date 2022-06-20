@@ -43,7 +43,7 @@ Here's a walkthrough of implemented user stories:
 
 **Walkthrough:**
 - BEFORE https://i.imgur.com/eEEUm8U.gif
-- AFTER https://i.imgur.com/02ixnZ3.gif
+- AFTER https://i.imgur.com/S18IPqr.mp4
 
 GIF created with [Kap](https://getkap.co/).
 
