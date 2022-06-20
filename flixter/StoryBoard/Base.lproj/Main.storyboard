@@ -166,6 +166,10 @@
                                         <rect key="frame" x="0.0" y="141" width="148" height="203"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nPl-4f-z0T">
+                                        <rect key="frame" x="25" y="47" width="364" height="656"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.16078431372549018" green="0.19607843137254902" blue="0.25490196078431371" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <viewLayoutGuide key="contentLayoutGuide" id="ezI-4k-F9a"/>
@@ -177,6 +181,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Now Playing" id="4gQ-m7-Aeh"/>
                     <connections>
+                        <outlet property="BiggerPoster" destination="nPl-4f-z0T" id="l5d-86-grv"/>
                         <outlet property="detailLable" destination="o64-6f-xZb" id="QZV-FG-5Tb"/>
                         <outlet property="mainPoster" destination="8ba-19-anx" id="oDU-79-uph"/>
                         <outlet property="ratingLable" destination="mhn-d7-lDx" id="QOg-mJ-eJN"/>

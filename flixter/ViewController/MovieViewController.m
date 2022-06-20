@@ -76,9 +76,6 @@
                for (id movie in self.movies) {
                    NSLog(@"%@", movie[@"title"]);
                }
-               // TODO: Store the movies in a property to use elsewhere
-               // the property is put under interface
-               // TODO: Reload your table view data
                [self.tableView reloadData];
            }
         [self.refreshControl endRefreshing];
@@ -87,8 +84,6 @@
 
         
        }];
-    // Stop the activity indicator
-    // Hides automatically if "Hides When Stopped" is enabled
     
     [task resume];
 }
@@ -118,7 +113,6 @@
     
     NSURL *url = [NSURL URLWithString:path];
     
-//    [cell.posterImage setImageWithURL:url];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     __weak myCustomCell *weakSelf = cell;
     [weakSelf.posterImage setImageWithURLRequest:request placeholderImage:nil
@@ -195,10 +189,5 @@
     }
     [self.tableView reloadData];
 }
-
-
-
-
-
 
 @end

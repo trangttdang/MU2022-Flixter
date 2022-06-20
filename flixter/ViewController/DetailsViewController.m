@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLable;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLable;
 @property (weak, nonatomic) IBOutlet UIImageView *mainPoster;
+@property (weak, nonatomic) IBOutlet UIImageView *BiggerPoster;
 
 @end
 
@@ -36,9 +37,9 @@
     NSString *directory = @"https://image.tmdb.org/t/p/w200/";
     NSString *directory_large = @"https://image.tmdb.org/t/p/w500/";
     NSString *path = [directory stringByAppendingString:image];
-    
+    NSString *path_bigger = [directory_large stringByAppendingString:image];
     NSURL *url = [NSURL URLWithString:path];
-    
+    NSURL *url_bigger = [NSURL URLWithString:path_bigger];
     
     NSString *backdrop_image = self.moviesDetail[@"backdrop_path"];
     NSString *backdrop_pathSmall = [directory stringByAppendingString:backdrop_image];
@@ -85,15 +86,17 @@
                                        // possibly try to get the large image
                                    }];
     
-//    [self.mainPoster setImageWithURL:backdrop_url];
+
     [self.subPoster setImageWithURL:url];
-    // Here we use the method didPan(sender:), which we defined in the previous step, as the action.
+    [self.BiggerPoster setImageWithURL:url_bigger];
+    self.BiggerPoster.hidden = YES;
+    //Tap Gesture Recognizer for viewing movie trailer and see larger poster
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     
     // Optionally set the number of required taps, e.g., 2 for a double click
     tapGestureRecognizer.numberOfTapsRequired = 1;
     
-    // Attach it to a view of your choice. If it's a UIImageView, remember to enable user interaction
+    //Enable user interaction
     [self.view setUserInteractionEnabled:YES];
     [self.view addGestureRecognizer:tapGestureRecognizer];
 
@@ -104,7 +107,15 @@
 
 
 - (IBAction)didTap:(UITapGestureRecognizer *)sender {
-    [self performSegueWithIdentifier:@"seeTrailer" sender:nil];
+    CGPoint MainPosterLocation = [sender locationInView:self.mainPoster];
+    CGPoint SubPosterLocation = [sender locationInView:self.subPoster];
+    if(CGRectContainsPoint(self.mainPoster.frame, MainPosterLocation)){
+        [self performSegueWithIdentifier:@"seeTrailer" sender:nil];
+    } else if (CGRectContainsPoint(self.subPoster.frame, SubPosterLocation)){
+        self.BiggerPoster.hidden = NO;
+    } else {
+        [self viewDidLoad];
+    }
     NSLog(@"%@", @"title");
 }
 
