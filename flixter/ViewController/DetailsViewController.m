@@ -7,13 +7,16 @@
 
 #import "DetailsViewController.h"
 #import "UIImageView+AFNetworking.h"
+#import "TrailerViewCell.h"
+#import "TrailerViewController.h"
 
 @interface DetailsViewController ()
-@property (weak, nonatomic) IBOutlet UIImageView *mainPoster;
+//@property (weak, nonatomic) IBOutlet UIImageView *mainPoster;
 @property (weak, nonatomic) IBOutlet UIImageView *subPoster;
 @property (weak, nonatomic) IBOutlet UILabel *detailLable;
 @property (weak, nonatomic) IBOutlet UILabel *titleLable;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLable;
+@property (weak, nonatomic) IBOutlet UIImageView *mainPoster;
 
 @end
 
@@ -33,7 +36,6 @@
     NSString *directory = @"https://image.tmdb.org/t/p/w200/";
     NSString *directory_large = @"https://image.tmdb.org/t/p/w500/";
     NSString *path = [directory stringByAppendingString:image];
-    NSString *path_large = [directory_large stringByAppendingString:image];
     
     NSURL *url = [NSURL URLWithString:path];
     
@@ -59,7 +61,7 @@
                                        weakSelf.mainPoster.alpha = 0.0;
                                        weakSelf.mainPoster.image = smallImage;
                                        
-                                       [UIView animateWithDuration:1.0
+                                       [UIView animateWithDuration:0.7
                                                         animations:^{
                                                             
                                                             weakSelf.mainPoster.alpha = 1.0;
@@ -85,47 +87,37 @@
     
 //    [self.mainPoster setImageWithURL:backdrop_url];
     [self.subPoster setImageWithURL:url];
+    // Here we use the method didPan(sender:), which we defined in the previous step, as the action.
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
+    
+    // Optionally set the number of required taps, e.g., 2 for a double click
+    tapGestureRecognizer.numberOfTapsRequired = 1;
+    
+    // Attach it to a view of your choice. If it's a UIImageView, remember to enable user interaction
+    [self.view setUserInteractionEnabled:YES];
+    [self.view addGestureRecognizer:tapGestureRecognizer];
+
+    
+    
 
 }
-//https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key=<<api_key>>&language=en-US
-- (void)fetchTrailer {
-    NSString *movieID = self.moviesDetail[@"id"];
-    NSString *link = @"https://api.themoviedb.org/3/movie/";
-    NSString *api = @"/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-    
-    NSString *queryLink = [link stringByAppendingString:[movieID stringByAppendingString:api]];
-    
-    
-    NSURL *url = [NSURL URLWithString:queryLink];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-           if (error != nil) {
-               NSLog(@"%@", [error localizedDescription]);
-            
-           }
-           else {
-               NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               NSLog(@"%@", dataDictionary);
-              
-           }
-    
-        
-       }];
-    
-    [task resume];
+
+
+- (IBAction)didTap:(UITapGestureRecognizer *)sender {
+    [self performSegueWithIdentifier:@"seeTrailer" sender:nil];
+    NSLog(@"%@", @"title");
 }
 
-/*
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
+//In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+     //Get the new view controller using [segue destinationViewController].
+     //Pass the selected object to the new view controller.
+    NSString *dataToPass = self.moviesDetail[@"id"];
+    TrailerViewController *detailVC = [segue destinationViewController];
+    detailVC.movieID = dataToPass;
 }
-*/
-
 
 
 @end
