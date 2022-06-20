@@ -162,7 +162,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 //Get the new view controller using [segue destinationViewController].
 //Pass the selected object to the new view controller.
-    NSDictionary *dataToPass = self.movies[self.tableView.indexPathForSelectedRow.row];
+    NSDictionary *dataToPass = self.filteredMovie[self.tableView.indexPathForSelectedRow.row];
     DetailsViewController *detailVC = [segue destinationViewController];
     detailVC.moviesDetail = dataToPass;
 
