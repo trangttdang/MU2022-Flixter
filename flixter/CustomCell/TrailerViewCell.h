@@ -1,5 +1,5 @@
 //
-//  TrailerViewController.h
+//  TrailerViewCell.h
 //  flixter
 //
 //  Created by Trang Dang on 6/19/22.
@@ -9,8 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TrailerViewController : UIViewController
-@property (nonatomic, strong) NSString *movieID;
+@interface TrailerViewCell : UITableViewCell
 
 @end
 
