@@ -42,8 +42,8 @@ Please list two areas of the assignment you'd like to **discuss further with you
 Here's a walkthrough of implemented user stories:
 
 **Walkthrough:**
-BEFORE https://i.imgur.com/eEEUm8U.gif
-AFTER https://i.imgur.com/CmFcrtG.gif
+- BEFORE https://i.imgur.com/eEEUm8U.gif
+- AFTER https://i.imgur.com/CmFcrtG.gif
 
 GIF created with [Kap](https://getkap.co/).
 
