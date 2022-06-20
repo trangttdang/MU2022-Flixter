@@ -21,8 +21,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    // Conform to the protocol
     self.MoviesCollectionView.dataSource = self;
     self.MoviesCollectionView.delegate = self;
+    
     [self fetchMovies];
 }
 
@@ -32,29 +34,18 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-           if (error != nil) {
-               NSLog(@"%@", [error localizedDescription]);
-           }
-           else {
-               NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               NSLog(@"%@", dataDictionary);
-               self.movies = dataDictionary[@"results"];
-               [self.MoviesCollectionView reloadData];
-           }
-       }];
+        if (error != nil) {
+            NSLog(@"%@", [error localizedDescription]);
+        }
+        else {
+            NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"%@", dataDictionary);
+            self.movies = dataDictionary[@"results"];
+            [self.MoviesCollectionView reloadData];
+        }
+    }];
     [task resume];
 }
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -63,15 +54,12 @@
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath{
     MovieViewGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MovieViewGridCell" forIndexPath:indexPath];
-                          
+    
     NSDictionary *movie = self.movies[indexPath.row];
     NSString *image = movie[@"poster_path"];
-    NSString *directory = @"https://image.tmdb.org/t/p/w200/";
+    NSString *directory = @"https://image.tmdb.org/t/p/w500/";
     NSString *path = [directory stringByAppendingString:image];
-//    NSLog(@"%@", path);
     NSURL *url = [NSURL URLWithString:path];
-    
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [cell.posterView setImageWithURL:url];
     
     return cell;
@@ -82,12 +70,13 @@
     int numberOfCellsPerRow = 4;
     int dimensions = (CGFloat)(totalwidth / numberOfCellsPerRow);
     return CGSizeMake(dimensions*1.25, dimensions*1.8);
-
+    
 }
 
+#pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//Get the new view controller using [segue destinationViewController].
-//Pass the selected object to the new view controller.
+    //Get the new view controller using [segue destinationViewController].
+    //Pass the selected object to the new view controller.
     NSDictionary *dataToPass = self.movies[self.MoviesCollectionView.indexPathsForSelectedItems[0].row];
     DetailsViewController *detailVC = [segue destinationViewController];
     detailVC.moviesDetail = dataToPass;
